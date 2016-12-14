@@ -4,7 +4,8 @@
  * 数据来源和ios 一样来自www.wunderground.com 
  **/
 
-;(function ($) {
+;
+(function ($) {
 	var api_key_wunderground = 'b4f96795c1c5848b',
 		_wunderground_base_url = 'http://api.wunderground.com/api/' + api_key_wunderground,
 		_wunderground_forecase_10day = 'forecast10day',
@@ -304,7 +305,9 @@
 			_tw = $(_tw);
 			$wsContainer.append(_tw);
 
-			_tw.on('click', 'p:nth-child(3)', [weatherInfo, iw_location_bg], eventsHandlers.removeLocationWeather);
+			//_tw.on('click', 'span:nth-child(3)', [weatherInfo, iw_location_bg], eventsHandlers.removeLocationWeather);
+			_tw.children('span:nth-child(3)').on('click', [weatherInfo, iw_location_bg], eventsHandlers.removeLocationWeather);
+
 			_tw.on('click', [weatherInfo, iw_location_bg], eventsHandlers.showLocationWeather);
 
 			eventsHandlers.loadLocationImage(_location, iw_location_bg, _tw);

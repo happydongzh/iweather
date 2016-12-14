@@ -25,7 +25,7 @@
 
 		wlist_template = '<div class="wlist-item"><p>{{location}}</p><p>{{temp}}</p><p><i class="fa fa-times" aria-hidden="true"></i></p></div>',
 
-		defaultBG = 'url(\'./resource/default_bg.png\')',
+		defaultBG = 'url(\'./img/default_bg.png\')',
 		_pixabay_API_key = '3670733-6e8c6d6c0b2b0995c0999a4d3',
 		_pixabay_API_url = 'https://pixabay.com/api/?key=' + _pixabay_API_key + '&orientation=vertical&category=travel,buildings,places,business&q={{query}}';
 

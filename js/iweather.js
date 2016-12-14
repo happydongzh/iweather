@@ -4,7 +4,8 @@
  * 数据来源和ios 一样来自www.wunderground.com 
  **/
 
-;(function ($) {
+;
+(function ($) {
 	var api_key_wunderground = 'b4f96795c1c5848b',
 		_wunderground_base_url = 'http://api.wunderground.com/api/' + api_key_wunderground,
 		_wunderground_forecase_10day = 'forecast10day',
@@ -23,7 +24,7 @@
 
 		weather_template = '<div class="weatherContainer slideOutToBottom"><div class="currentWeather"><p>--</p><p></p></div><div class="curTemp">{{tempNow}}</div><div class="curDay"><span>{{day}}</span><span></span><span><span>{{high}}</span><span>{{low}}</span></span></div><div class="hoursWeather"></div><div class="dailyWeather"><div class="days"></div></div></div>',
 
-		wlist_template = '<div class="wlist-item"><p>{{location}}</p><p>{{temp}}</p><p><i class="fa fa-times" aria-hidden="true"></i></p></div>',
+		wlist_template = '<div class="wlist-item"><span>{{location}}</span><span>{{temp}}</span><span><div class="remove icon"></div></span></div>',
 
 		defaultBG = 'url(\'./img/default_bg.png\')',
 		_pixabay_API_key = '3670733-6e8c6d6c0b2b0995c0999a4d3',
@@ -83,22 +84,8 @@
 			}, 400)
 		},
 		docKeypress: function (e) {
-			/**
-			//up key pressed
-			if (e.keyCode == 38) {
-				if ($locSelection.children().length != 0) {
-					console.log('fwefwef');
-				}
-			}
-			//down key pressed
-			if (e.keyCode == 40) {
-
-			}
-			**/
 			//esc key pressed
 			if (e.keyCode == 27 && $winfoContainer.children().length != 0) {
-				//console.log(this);
-				//debugger
 				eventsHandlers.cancelSearch();
 			}
 		},
@@ -318,7 +305,9 @@
 			_tw = $(_tw);
 			$wsContainer.append(_tw);
 
-			_tw.on('click', 'p:nth-child(3)', [weatherInfo, iw_location_bg], eventsHandlers.removeLocationWeather);
+			//_tw.on('click', 'span:nth-child(3)', [weatherInfo, iw_location_bg], eventsHandlers.removeLocationWeather);
+			_tw.children('span:nth-child(3)').on('click', [weatherInfo, iw_location_bg], eventsHandlers.removeLocationWeather);
+
 			_tw.on('click', [weatherInfo, iw_location_bg], eventsHandlers.showLocationWeather);
 
 			eventsHandlers.loadLocationImage(_location, iw_location_bg, _tw);

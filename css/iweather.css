@@ -253,6 +253,33 @@ Weather CSS definitions start==================================
 	transform: rotate(90deg);
 }
 
+.remove.icon {
+	color: #f43636;
+	position: absolute;
+	margin-left: 3px;
+	margin-top: 10px;
+}
+
+.remove.icon:before {
+	content: '';
+	position: absolute;
+	width: 15px;
+	height: 1px;
+	background-color: currentColor;
+	-webkit-transform: rotate(45deg);
+	transform: rotate(45deg);
+}
+
+.remove.icon:after {
+	content: '';
+	position: absolute;
+	width: 15px;
+	height: 1px;
+	background-color: currentColor;
+	-webkit-transform: rotate(-45deg);
+	transform: rotate(-45deg);
+}
+
 .weather * {
 	transition: all .5s ease-out;
 }
@@ -374,24 +401,11 @@ Weather CSS definitions start==================================
 	text-align: center;
 }
 
-.dailyWeather .days .day > span:nth-child(3) {
-	text-align: right;
-}
-
 .curDay > span > span,
 .dailyWeather .days .day > span > span {
-	text-align: center;
+	text-align: right;
 	width: 50%;
 	display: inline-block;
-}
-
-.curDay > span > span:nth-child(1),
-.dailyWeather .days .day > span > span:nth-child(1) {
-	text-align: right;
-}
-
-.dailyWeather .days .day > span > span:nth-child(2) {
-	text-align: center;
 }
 
 .dailyWeather .days .day > p {
@@ -498,41 +512,45 @@ Weather CSS definitions start==================================
 	color: #FFF;
 }
 
-.wlist-item > p {
+.wlist-item > span {
 	display: inline-block;
 	transition: all .5s;
 }
 
-.wlist-item > p:nth-child(1),
-.wlist-item > p:nth-child(2) {
+.wlist-item > span:nth-child(1),
+.wlist-item > span:nth-child(2) {
 	font-size: 16pt;
 	width: 45%;
 }
 
-.wlist-item >p:nth-child(1) {
+.wlist-item >span:nth-child(1) {
 	text-align: left;
 	margin: 0 0 0 10px;
 }
 
-.wlist-item >p:nth-child(2) {
+.wlist-item >span:nth-child(2) {
 	text-align: right;
 	margin: 2px 0 2px 0;
 }
 
-.wlist-item >p:nth-child(3) {
+.wlist-item >span:nth-child(3) {
 	opacity: 0;
 	transform: translateX(40px);
-	margin: 2px 0 2px 0;
 	color: red;
+	height: 16px;
 }
 
 .wlist-item:hover {
 	box-shadow: 0 0 5px 0 #000;
 }
 
-.wlist-item:hover > p:nth-child(3) {
+.wlist-item:hover > span:nth-child(2) {
+	transform: translateX(-5px);
+}
+
+.wlist-item:hover > span:nth-child(3) {
 	opacity: 1;
-	transform: translateX(10px);
+	transform: translateX(0px);
 }
 
 .slideOutToBottom {

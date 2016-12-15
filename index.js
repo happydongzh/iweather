@@ -1,8 +1,4 @@
 (function ($) {
-	var ww = $('#myWeather').iweather();
-	
-	$('#linksDiv a').click(function (e) {
-		ww.addWeather($(this).attr('id'));
-	})
-
+	var weather = $('#myWeather').iweather();
+	weather.geoLoadWeather();
 })(jQuery)

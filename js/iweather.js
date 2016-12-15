@@ -6,6 +6,7 @@
 
 ;
 (function ($) {
+
 	var api_key_wunderground = 'b4f96795c1c5848b',
 		_wunderground_base_url = 'http://api.wunderground.com/api/' + api_key_wunderground,
 		_wunderground_forecase_10day = 'forecast10day',
@@ -19,7 +20,7 @@
 
 		weathersMainContainer = '<div class="iw-weathersContainer"><div class="topBar"><div class="more-solid icon"></div><div class="more-solid icon" style="margin-left: 23px;"></div><div class="time">20:30PM</div><div class="battery-3 icon"></div></div><div class="weather"></div><div class="bottomBar"><div class="day"><div class="btmbtn"><div class="plus icon"></div></div><div class="btmbtn"><div class="justified icon"></div></div></div></div></div>',
 
-		loading_template = '<div class="iw-loadingContainer"><i class="fa fa-spinner fa-pulse"></i></div>',
+		loading_template = '<div class="iw-loadingContainer"><div class="spinner"><div class="spinner-container container1"><div class="circle1"></div><div class="circle2"></div><div class="circle3"></div><div class="circle4"></div></div><div class="spinner-container container2"><div class="circle1"></div><div class="circle2"></div><div class="circle3"></div><div class="circle4"></div></div><div class="spinner-container container3"><div class="circle1"></div><div class="circle2"></div><div class="circle3"></div><div class="circle4"></div></div></div></div>',
 		search_template = '<div class="iw-searchContainer"><label>输入城市名</label><div class="search icon"></div><input type="text" /><label>取消</label><ul></ul></div>',
 
 		weather_template = '<div class="weatherContainer slideOutToBottom"><div class="currentWeather"><p>--</p><p></p></div><div class="curTemp">{{tempNow}}</div><div class="curDay"><span>{{day}}</span><span></span><span><span>{{high}}</span><span>{{low}}</span></span></div><div class="hoursWeather"></div><div class="dailyWeather"><div class="days"></div></div></div>',
@@ -51,7 +52,7 @@
 			}
 			timer = setTimeout(function (e) {
 				clearTimeout(timer);
-				$loadingContainer.slideToggle();
+				$loadingContainer.show();
 				$.ajax({
 					url: _wunderground_locationSearch_url + _input.val(),
 					dataType: "JSONP",
@@ -60,10 +61,8 @@
 					jsonp: 'cb',
 					jsonpCallback: 'showCities',
 					success: function (data) {
-						//$loadingContainer.toggleClass('iw-loadingContainerHide');
-						$loadingContainer.slideToggle();
 						var cities = data['RESULTS'];
-						//var cityUL = $locSelection;
+						$loadingContainer.hide();
 						if (cities.length == 0) {
 							$locSelection.html('');
 							$locSelection.html('<li style="color:black;">Not found</li>');
@@ -91,7 +90,7 @@
 		},
 		locationSelect: function (e) {
 			$locSelection.children().remove();
-			$loadingContainer.slideToggle();
+			$loadingContainer.show();
 			$locSearch.val(e.data.name);
 			$.getJSON(_wunderground_default_url + e.data.l + '.json', eventsHandlers.renderWeatherDom);
 		},
@@ -334,13 +333,11 @@
 			$winfoContainer.removeClass('iw-weatherContainer_masklayer');
 			$searchContainer.addClass('slideOutToBottom')
 
-			if ($loadingContainer.css('display') != 'none') {
-				$loadingContainer.slideToggle();
-			}
-
+			$loadingContainer.hide();
 			$viewStyle = 'NORMAL';
 		},
 		loadLocationImage: function (location, iwLocationBg, cityListItem) {
+			$loadingContainer.show();
 			$.ajax({
 				url: _pixabay_API_url.replace(/{{query}}/g, encodeURI(location)),
 				dataType: 'json',
@@ -357,6 +354,7 @@
 							eventsHandlers.imageLoadEvent.call(bgImg);
 						}
 					} else {
+						$loadingContainer.hide();
 						iwLocationBg.css({
 							backgroundImage: defaultBG
 						});
@@ -365,6 +363,7 @@
 
 				},
 				error: function (x, s, e) {
+					$loadingContainer.hide();
 					iwLocationBg.css({
 						backgroundImage: defaultBG
 					});
@@ -423,37 +422,16 @@
 				}
 			}
 			var f = func(_elmts);
-
 			setTimeout(f, 100);
-
-			//			setTimeout(function (elmts) {
-			//				_elm.nextAll('wlist-item').each(function (i, elmt) {
-			//					var a = $(elmt).css('transform').replace(/.*\(\s?|\s?\)/g, '');
-			//					a = parseInt(a);
-			//					$(elmt).css({
-			//						transform: 'translateY(' + (a + (-h)) + 'px)'
-			//					});
-			//				});
-			//				_elm.remove();
-			//				elmts[0].remove();
-			//				elmts[1].remove();
-			//			}, 100);
-
 		},
 		geoDetection: function () {
 			$locSearch.attr('placeholder', '正在查找位置...');
 			$iconAddWeather.click();
-			if ($loadingContainer.css('display') == 'none') {
-				$loadingContainer.slideToggle();
-			}
+			$loadingContainer.show();
 			if (navigator.geolocation) {
 				navigator.geolocation.getCurrentPosition(function (pos) {
-					//console.log(pos);
-					var _url = _wunderground_default_url + '/' + pos.coords.latitude + ',' + pos.coords.longitude + '.json';
-					//var url = 'http://api.wunderground.com/api/b4f96795c1c5848b/geolookup/forecast10day/conditions/hourly/astronomy/lang:CN/q/' + pos.coords.latitude + ',' + pos.coords.longitude + '.json';
-
+					var _url = _wunderground_base_url + '/' + _wunderground_forecase_10day + '/' + _wunderground_forecase_conditions + '/' + _wunderground_forecase_hourly + '/' + _wunderground_forecase_astronomy + '/geolookup/' + _wunderground_param + '/q/' + pos.coords.latitude + ',' + pos.coords.longitude + '.json';
 					$.getJSON(_url, eventsHandlers.renderWeatherDom);
-
 				}, function (error) {
 					switch (error.code) {
 					case error.PERMISSION_DENIED:
@@ -469,23 +447,21 @@
 						alert('未知错误');
 						break;
 					}
-					$locSearch.attr('placeholder', '');
-					$loadingContainer.slideToggle();
+					$locSearch.attr('placeholder', '请输入城市名');
+					$loadingContainer.hide();
 
 				}, {
-					timeout: 5000
+					timeout: 10000
 				});
 			} else {
-				$locSearch.attr('placeholder', '');
-				$loadingContainer.slideToggle();
+				$locSearch.attr('placeholder', '请输入城市名');
+				$loadingContainer.hide();
 			}
 		},
 		cancelSearch: function () {
 			if ($winfoContainer.children().length == 0) return;
 			$searchContainer.addClass('slideOutToBottom');
-			if ($loadingContainer.css('display') != 'none') {
-				$loadingContainer.slideToggle();
-			}
+			$loadingContainer.hide();
 			$winfoContainer.removeClass('iw-weatherContainer_masklayer').siblings('div.iw-location-bg.current-bg').removeClass('iw-weatherContainer_masklayer');
 			$winfoContainer.siblings('div.wlist-item.slideInFromBottom').removeClass('slideInFromBottom');
 		}

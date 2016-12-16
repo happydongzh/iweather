@@ -8,7 +8,7 @@
 (function ($) {
 
 	var api_key_wunderground = 'b4f96795c1c5848b',
-		_wunderground_base_url = 'http://api.wunderground.com/api/' + api_key_wunderground,
+		_wunderground_base_url = 'https://api.wunderground.com/api/' + api_key_wunderground,
 		_wunderground_forecase_10day = 'forecast10day',
 		_wunderground_forecase_conditions = 'conditions',
 		_wunderground_forecase_hourly = 'hourly',
@@ -16,7 +16,7 @@
 		_wunderground_param = 'lang:CN',
 		_wunderground_default_url = _wunderground_base_url + '/' + _wunderground_forecase_10day + '/' + _wunderground_forecase_conditions + '/' + _wunderground_forecase_hourly + '/' + _wunderground_forecase_astronomy + '/' + _wunderground_param,
 
-		_wunderground_locationSearch_url = "http://autocomplete.wunderground.com/aq?query=",
+		_wunderground_locationSearch_url = "https://autocomplete.wunderground.com/aq?query=",
 
 		weathersMainContainer = '<div class="iw-weathersContainer"><div class="topBar"><div class="more-solid icon"></div><div class="more-solid icon" style="margin-left: 23px;"></div><div class="time">20:30PM</div><div class="battery-3 icon"></div></div><div class="weather"></div><div class="bottomBar"><div class="day"><div class="btmbtn"><div class="plus icon"></div></div><div class="btmbtn"><div class="justified icon"></div></div></div></div></div>',
 

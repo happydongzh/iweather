@@ -1,4 +1,4 @@
 (function ($) {
-	var weather = $('#myWeather').iweather();
+	var weather = new iWeather($('#myWeather'));
 	weather.geoLoadWeather();
 })(jQuery)

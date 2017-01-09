@@ -525,7 +525,8 @@ Weather CSS definitions start==================================
 .dailyWeather .days .day > span {
 	display: inline-block;
 	font-size: 14pt;
-	width: 33%;
+	margin: 3px 3px;
+	width: 30%;
 }
 
 .curDay > span:nth-child(2) {}

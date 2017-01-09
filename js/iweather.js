@@ -6,6 +6,18 @@
 ;
 (function ($) {
 
+	var api_key_wunderground = 'b4f96795c1c5848b',
+		_wunderground_base_url = 'https://api.wunderground.com/api/' + api_key_wunderground,
+		_wunderground_forecase_10day = 'forecast10day',
+		_wunderground_forecase_conditions = 'conditions',
+		_wunderground_forecase_hourly = 'hourly',
+		_wunderground_forecase_astronomy = 'astronomy',
+		_wunderground_param = 'lang:CN',
+		_wunderground_locationSearch_url = 'https://autocomplete.wunderground.com/aq?query=',
+		_wunderground_default_url = _wunderground_base_url + '/' + _wunderground_forecase_10day + '/' + _wunderground_forecase_conditions + '/' + _wunderground_forecase_hourly + '/' + _wunderground_forecase_astronomy + '/' + _wunderground_param,
+		_pixabay_API_key = '3670733-6e8c6d6c0b2b0995c0999a4d3',
+		_pixabay_API_url = 'https://pixabay.com/api/?key=' + _pixabay_API_key + '&orientation=vertical&category=travel,buildings,places,business&q={{query}}';
+
 	function iWeather(ele, opt) {
 		this.defaults = {};
 
@@ -316,7 +328,7 @@
 
 			},
 			//添加城市天气
-			addWeather: function (e) {
+			toAddWeather: function (e) {
 				self.$searchContainer.removeClass('slideOutToBottom');
 				self.$winfoContainer.addClass('iw-weatherContainer_masklayer').siblings('div.iw-location-bg.current-bg').addClass('iw-weatherContainer_masklayer');
 				self.$wsContainer.find('div.wlist-item').removeClass('slideInFromBottom');
@@ -470,27 +482,16 @@
 		var _initEventsListeners = function () {
 			$(document).on('keydown', eventsHandlers.docKeypress);
 			self.$locSearch.on('keydown', eventsHandlers.locationInput);
-			self.$iconAddWeather.on('click', eventsHandlers.addWeather);
+			self.$iconAddWeather.on('click', eventsHandlers.toAddWeather);
 			self.$iconListView.on('click', eventsHandlers.showListView);
 			self.$searchContainer.children('label').on('click', eventsHandlers.cancelSearch);
+			self._addWeather = eventsHandlers.renderWeatherDom;
 		};
 
 		_init();
 
 		return this;
 	};
-
-	var api_key_wunderground = 'b4f96795c1c5848b',
-		_wunderground_base_url = 'https://api.wunderground.com/api/' + api_key_wunderground,
-		_wunderground_forecase_10day = 'forecast10day',
-		_wunderground_forecase_conditions = 'conditions',
-		_wunderground_forecase_hourly = 'hourly',
-		_wunderground_forecase_astronomy = 'astronomy',
-		_wunderground_param = 'lang:CN',
-		_wunderground_locationSearch_url = 'https://autocomplete.wunderground.com/aq?query=',
-		_wunderground_default_url = _wunderground_base_url + '/' + _wunderground_forecase_10day + '/' + _wunderground_forecase_conditions + '/' + _wunderground_forecase_hourly + '/' + _wunderground_forecase_astronomy + '/' + _wunderground_param,
-		_pixabay_API_key = '3670733-6e8c6d6c0b2b0995c0999a4d3',
-		_pixabay_API_url = 'https://pixabay.com/api/?key=' + _pixabay_API_key + '&orientation=vertical&category=travel,buildings,places,business&q={{query}}';
 
 	iWeather.prototype = {
 		template_string: {
@@ -505,10 +506,15 @@
 
 			defaultBG: 'url(\'./img/default_bg.png\')',
 		},
+		/** coming soon
 		addWeather: function (value) {
 			this.$locSearch.val(value);
-			$.getJSON('./mockData/' + value + '.json', eventsHandlers.renderWeatherDom);
+			console.log(_wunderground_base_url);
+			$.getJSON('./mockData/' + value + '.json', function(wdata){
+				eventsHandlers.renderWeatherDom(wdata);
+			});
 		},
+		**/
 		removeWeather: function (value) {
 			var _x = this.$wsContainer.children('.wlist-item').eq(value);
 			_x.children('P').eq(2).click();
@@ -521,8 +527,8 @@
 			self.$loadingContainer.show();
 			if (navigator.geolocation) {
 				navigator.geolocation.getCurrentPosition(function (pos) {
-					var _url = api_resources._wunderground_base_url + '/' + api_resources._wunderground_forecase_10day + '/' + api_resources._wunderground_forecase_conditions + '/' + api_resources._wunderground_forecase_hourly + '/' + api_resources._wunderground_forecase_astronomy + '/geolookup/' + api_resources._wunderground_param + '/q/' + pos.coords.latitude + ',' + pos.coords.longitude + '.json';
-					$.getJSON(_url, eventsHandlers.renderWeatherDom);
+					var _url = _wunderground_base_url + '/' + _wunderground_forecase_10day + '/' + _wunderground_forecase_conditions + '/' + _wunderground_forecase_hourly + '/' + _wunderground_forecase_astronomy + '/geolookup/' + _wunderground_param + '/q/' + pos.coords.latitude + ',' + pos.coords.longitude + '.json';
+					$.getJSON(_url, self._addWeather);
 				}, function (error) {
 					switch (error.code) {
 					case error.PERMISSION_DENIED:
@@ -553,7 +559,6 @@
 			this.$iconAddWeather.click();
 		},
 		searchCancel: function () {
-			//eventsHandlers.cancelSearch();
 			var self = this;
 			if (self.$winfoContainer.children().length == 0) return;
 			self.$searchContainer.addClass('slideOutToBottom');

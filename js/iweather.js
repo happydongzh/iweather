@@ -1,7 +1,16 @@
 /**
- * author: liyuan dong
- * 仿ios天气预报的juqery plugin
- * 数据来源和ios 一样来自www.wunderground.com (不过有时候不准啊～～～)
+ *
+ *Auther: Liyuan Dong
+ *Version: 0.1
+ *Github: https://github.com/happydongzh
+ *Date: 12/15/2016
+ *Description: 仿ios天气预报的juqery plugin 数据来源和ios 一样来自www.wunderground.com (不过有时候不准啊～～～).
+ *
+ *
+ *Bug: 
+ *	1.不支持中文输入查询地点(因为www.wunderground.com 的API不支持)， 所以无法编程试添加天气。因为无法准确获取location信息。
+ *
+ *
  **/
 ;
 (function ($) {
